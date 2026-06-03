@@ -1,0 +1,69 @@
+version: "3.9"
+
+services:
+
+  app_conta_azul:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: conta_azul_app
+    working_dir: /var/www/projeto-conta-azul
+    volumes:
+      - ./:/var/www/projeto-conta-azul
+    depends_on:
+      - pgsql_conta_azul
+    networks:
+      - laravel
+      - web  # <--- Adicione a rede externa aqui
+
+  queue_conta_azul:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: conta_azul_queue
+    working_dir: /var/www/projeto-conta-azul
+    command: php artisan queue:work --tries=3 --timeout=60
+    volumes:
+      - ./:/var/www/projeto-conta-azul
+    depends_on:
+      - pgsql_conta_azul
+      - app_conta_azul
+    networks:
+      - laravel
+
+  scheduler_conta_azul:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: conta_azul_scheduler
+    working_dir: /var/www/projeto-conta-azul
+    command: php artisan schedule:work
+    volumes:
+      - ./:/var/www/projeto-conta-azul
+    depends_on:
+      - app_conta_azul
+    networks:
+      - laravel
+
+  pgsql_conta_azul:
+    image: postgres:16
+    container_name: conta_azul_pgsql
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: laravel
+      POSTGRES_USER: laravel
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5447:5432"
+    volumes:
+      - pgdata_conta_azul:/var/lib/postgresql/data
+    networks:
+      - laravel
+
+volumes:
+  pgdata_conta_azul:
+
+networks:
+  laravel:
+  web:
+    external: true
