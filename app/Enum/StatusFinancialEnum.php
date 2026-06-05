@@ -4,8 +4,8 @@ namespace App\Enum;
 
 enum StatusFinancialEnum: string
 {
-    case ABERTO = 'aberto';
-    case PENDENTE = 'pendente';
-    case PAGO = 'pago';
-    case BAIXADO = 'baixado';
+    case ABERTO = 'ABERTO';
+    case PENDENTE = 'PENDENTE';
+    case PAGO = 'PAGO';
+    case BAIXADO = 'BAIXADO';
 }

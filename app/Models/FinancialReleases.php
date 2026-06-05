@@ -14,6 +14,8 @@ class FinancialReleases extends Model
     protected $fillable = [
         'id_card_pipefy',
         'status',
+        'protocol',
+        'event'
     ];
 
     protected $casts = [

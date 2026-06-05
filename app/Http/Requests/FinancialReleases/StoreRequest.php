@@ -20,11 +20,14 @@ class StoreRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
+    
     public function rules(): array
     {
         return [
             'id_card_pipefy' => 'required|numeric',
-            'status' => 'required|in:aberto,pendente,pago,baixado',
+            'status' => 'required|in:ABERTO,PENDENTE,PAGO,BAIXADO',
+            'protocol' => 'required|string|max:255',
+            'event' => 'nullable|string|max:255'
         ];
     }
 }

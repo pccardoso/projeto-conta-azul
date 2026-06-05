@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Service\TokensService;
 
-/**
- * Gerenciamento de Tokens
- */
 
 class TokensController extends Controller
 {
