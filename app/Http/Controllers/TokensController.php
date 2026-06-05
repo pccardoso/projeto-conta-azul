@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Service\TokensService;
 
+/**
+ * Gerenciamento de Tokens
+ */
+
 class TokensController extends Controller
 {
 
@@ -67,6 +71,10 @@ class TokensController extends Controller
     {
         //
     }
+
+    /**
+     * Retornar token válido da integração com Conta Azul
+     */
 
     public function getToken()
     {

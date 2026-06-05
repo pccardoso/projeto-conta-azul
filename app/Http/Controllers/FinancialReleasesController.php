@@ -33,9 +33,9 @@ class FinancialReleasesController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Criar novo lançamento financeiro
      */
-    
+
     public function store(StoreRequest $request)
     {
     
