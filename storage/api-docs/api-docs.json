@@ -1,0 +1,65 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Conta Azul",
+        "description": "Integração com Conta Azul",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Servidor Local"
+        }
+    ],
+    "paths": {
+        "/api/financial-releases": {
+            "post": {
+                "tags": [
+                    "Financial Releases"
+                ],
+                "summary": "Criar liberação financeira",
+                "description": "Cria uma nova liberação financeira no Conta Azul.",
+                "operationId": "createFinancialRelease",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "descricao",
+                                    "valor"
+                                ],
+                                "properties": {
+                                    "descricao": {
+                                        "type": "string",
+                                        "example": "Pagamento de fornecedor"
+                                    },
+                                    "valor": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1500.5
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Liberação financeira criada com sucesso"
+                    },
+                    "500": {
+                        "description": "Erro ao criar liberação financeira"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Financial Releases",
+            "description": "Financial Releases"
+        }
+    ]
+}

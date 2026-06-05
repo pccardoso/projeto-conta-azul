@@ -15,35 +15,6 @@ services:
     networks:
       - laravel
 
-  queue:
-    build:
-      context: .
-      dockerfile: docker/php/Dockerfile
-    container_name: conta_azul_queue
-    working_dir: /var/www/projeto-conta-azul
-    command: php artisan queue:work --tries=3 --timeout=60
-    volumes:
-      - ./:/var/www/projeto-conta-azul
-    depends_on:
-      - pgsql
-      - app
-    networks:
-      - laravel
-
-  scheduler:
-    build:
-      context: .
-      dockerfile: docker/php/Dockerfile
-    container_name: conta_azul_scheduler
-    working_dir: /var/www/projeto-conta-azul
-    command: php artisan schedule:work
-    volumes:
-      - ./:/var/www/projeto-conta-azul
-    depends_on:
-      - app
-    networks:
-      - laravel
-
   nginx:
     image: nginx:latest
     container_name: conta_azul_nginx
