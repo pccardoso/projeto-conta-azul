@@ -17,6 +17,11 @@ class PipefyConfiguration{
             "pipe_id" => 306807029,
             "position_parent_relation" => 3,
             "position_beneficiary" => 0
+        ],
+        [
+            "pipe_id" => 306993989,
+            "position_parent_relation" => 7,
+            "position_beneficiary" => 0
         ]
     ];
 

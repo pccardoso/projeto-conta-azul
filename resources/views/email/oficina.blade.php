@@ -56,7 +56,7 @@
                                     <td style="padding:25px;">
 
                                         <h2 style="margin-top:0;color:#1e3a8a;font-size:18px;">
-                                            Dados do Prestador
+                                            Dados do Beneficiário
                                         </h2>
 
                                         <p style="margin:12px 0;color:#333333;">
@@ -77,6 +77,11 @@
                                         <p style="margin:12px 0;color:#333333;">
                                             <strong>Endereço:</strong><br>
                                             {{ $payload['Endereço Completo'] ?? '-' }}
+                                        </p>
+
+                                        <p style="margin:12px 0;color:#333333;">
+                                            <strong>Valor:</strong><br>
+                                            R$ {{ isset($payload['valor']) ? number_format($payload['valor'], 2, ',', '.') : '0,00' }}
                                         </p>
 
                                     </td>

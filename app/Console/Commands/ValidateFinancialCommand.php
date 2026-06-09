@@ -41,7 +41,7 @@ class ValidateFinancialCommand extends Command
 
                 if($statusEvent === StatusFinancialEnum::QUITADO->value){
 
-                    $financialReleasesService->sendEmailBeneficiary($financial->id_card_pipefy);
+                    $financialReleasesService->sendEmailBeneficiary($financial->id_card_pipefy, $financial);
 
                     $financial->update(['status' => StatusFinancialEnum::QUITADO]);
 

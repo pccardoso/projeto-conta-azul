@@ -5,10 +5,11 @@
     use App\Models\FinancialReleases;
     use App\Service\ContaAzulService;
     use Illuminate\Support\Facades\Mail;
-    use App\Mail\TesteEmail;
+    use App\Mail\SendEmailOficina;
     use App\Support\PipefyConfiguration;
     use Symfony\Component\HttpKernel\Exception\HttpException;
     use Illuminate\Support\Facades\Http;
+    use Illuminate\Support\Facades\Log;
 
     class FinancialReleasesService
     {
@@ -128,13 +129,25 @@
 
         }
 
-        public function sendEmailBeneficiary(int $idCardFinancial){
+        public function sendEmailBeneficiary(int $idCardFinancial, FinancialReleases $financialReleases){
 
             try{
 
                 $dataBeneficiary = $this->getArrayBeneficiaryPipefy($idCardFinancial);
 
-                Mail::to('xoxo.sto2024@gmail.com')->queue(new TesteEmail($dataBeneficiary));
+                Log::info('Dados do Beneficiário: ' . json_encode(
+                    json_encode([
+                    ...$dataBeneficiary,
+                    ...$financialReleases->toArray()
+                ])
+                ));
+                
+                Mail::to('xoxo.sto2024@gmail.com')->queue(new SendEmailOficina([
+                    ...$dataBeneficiary,
+                    ...$financialReleases->toArray()
+                ]));
+
+                $financialReleases->update(['email_status' => true]);
 
             }catch(\Exception $e){
                 throw new \Exception($e->getMessage());
