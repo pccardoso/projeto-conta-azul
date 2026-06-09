@@ -12,6 +12,7 @@ Route::prefix('tokens')->group(function () {
 
 Route::prefix('financial-releases')->group(function () {
     Route::post('/', [FinancialReleasesController::class, 'store']);
+    Route::get('/get-beneficiary/{idCardFinancial}', [FinancialReleasesController::class, 'getArrayBeneficiary']);
 });
 
 Route::prefix('conta-azul')->group(function () {

@@ -88,4 +88,5 @@ class TokensController extends Controller
             return response()->json(['message' => 'Token not found'], 404);
         }
     }
+
 }

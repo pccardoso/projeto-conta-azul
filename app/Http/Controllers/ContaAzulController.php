@@ -18,6 +18,11 @@ class ContaAzulController extends Controller
 
     
     public function getProtocol(string $protocol){
+
+        if(empty($protocol)){
+            return response()->json(['error' => 'O protocolo é obrigatório.'], 400);
+        }
+
         return $this->contaAzulService->getProtocol($protocol);
     }
 
@@ -25,6 +30,11 @@ class ContaAzulController extends Controller
      * Obter informações do evento do Conta Azul
      */
     public function getEvent(string $eventId){
+
+        if(empty($eventId)){
+            return response()->json(['error' => 'O evento é obrigatório.'], 400);
+        }
+
         return $this->contaAzulService->getEvent($eventId);
     }
 

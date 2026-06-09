@@ -15,12 +15,23 @@ class FinancialReleases extends Model
         'id_card_pipefy',
         'status',
         'protocol',
-        'event'
+        'event',
+        'type_event',
+        'date_of_competence',
+        'valor',
+        'valor_bruto',
+        'due_date',
+        'due_date_expected',
+        'amount_paid',
+        'observation',
+        'notes',
+        'email_status'
     ];
 
     protected $casts = [
         'status' => StatusFinancialEnum::class,
-        'id_card_pipefy' => 'integer'
+        'id_card_pipefy' => 'integer',
+        'email_status' => 'boolean'
     ];
 
 }

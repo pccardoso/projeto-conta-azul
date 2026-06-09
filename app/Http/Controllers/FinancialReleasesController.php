@@ -85,4 +85,8 @@ class FinancialReleasesController extends Controller
     {
         //
     }
+
+    public function getArrayBeneficiary(int $idCardFinancial): array{
+        return $this->financialReleasesService->getArrayBeneficiaryPipefy($idCardFinancial);
+    }
 }

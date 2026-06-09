@@ -7,5 +7,5 @@ enum StatusFinancialEnum: string
     case ABERTO = 'ABERTO';
     case PENDENTE = 'PENDENTE';
     case PAGO = 'PAGO';
-    case BAIXADO = 'BAIXADO';
+    case QUITADO = 'QUITADO';
 }
