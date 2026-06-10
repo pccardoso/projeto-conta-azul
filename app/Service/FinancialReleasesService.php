@@ -115,12 +115,10 @@
 
                     }
 
-                    throw new HttpException(404, 'Nenhuma configuração de pipe encontrada no microserviço para o card informado, favor contatar a TI.');
+                    Log::error('Nenhuma configuração de relacionamento foi encontrada para o card: '.$idCardFinancial);
 
-                }
+                    return [];
 
-                if($responseCardFinancial->status() === 403){
-                    return $responseCardFinancial->json();
                 }
 
             }catch(\Exception $e){
@@ -141,13 +139,16 @@
                     ...$financialReleases->toArray()
                 ])
                 ));
-                
-                Mail::to('xoxo.sto2024@gmail.com')->queue(new SendEmailOficina([
-                    ...$dataBeneficiary,
-                    ...$financialReleases->toArray()
-                ]));
 
-                $financialReleases->update(['email_status' => true]);
+                if(!empty($dataBeneficiary)){
+
+                    Mail::to('xoxo.sto2024@gmail.com')->queue(new SendEmailOficina([
+                        ...$dataBeneficiary,
+                        ...$financialReleases->toArray()
+                    ]));
+
+                    $financialReleases->update(['email_status' => true]);
+                }
 
             }catch(\Exception $e){
                 throw new \Exception($e->getMessage());
