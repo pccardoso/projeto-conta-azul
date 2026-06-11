@@ -9,4 +9,4 @@ Artisan::command('inspire', function () {
 
 Schedule::command('app:refresh-token-command')->cron('*/55 * * * *');
 
-Schedule::command('app:validate-financial-command')->cron('*/10 * * * *');
+Schedule::command('app:validate-financial-command')->cron('*/50 * * * *');
