@@ -133,25 +133,43 @@
 
                 $dataBeneficiary = $this->getArrayBeneficiaryPipefy($idCardFinancial);
 
-                Log::info('Dados do Beneficiário: ' . json_encode(
-                    json_encode([
-                    ...$dataBeneficiary,
-                    ...$financialReleases->toArray()
-                ])
-                ));
 
                 if(!empty($dataBeneficiary)){
 
-                    Mail::to('xoxo.sto2024@gmail.com')->queue(new SendEmailOficina([
-                        ...$dataBeneficiary,
-                        ...$financialReleases->toArray()
-                    ]));
+                    $email = data_get($dataBeneficiary, 'E-mail', null);
 
-                    $financialReleases->update(['email_status' => true]);
+                    Log::info('E-mail do beneficiário: ' . $email);
+
+                    if(empty($email)){
+                        $financialReleases->update([
+                            'logs' => "E-mail do beneficiário nulo."
+                        ]);
+                    }else{
+
+                        Mail::to('xoxo.sto2024@gmail.com')->queue(new SendEmailOficina([
+                            ...$dataBeneficiary,
+                            ...$financialReleases->toArray()
+                        ]));
+
+                        $financialReleases->update([
+                            'email_status' => true,
+                            'logs' => "E-mail enviado com sucesso."
+                        ]);
+
+                    }
+                }else{
+
+                    Log::info('As informações do beneficiário não foram encontradas, validar as configurações.');
+                    $financialReleases->update([
+                        'logs' => "As informações do beneficiário não foram encontradas, validar as configurações."
+                    ]);
+
                 }
 
+                
+
             }catch(\Exception $e){
-                throw new \Exception($e->getMessage());
+                Log::error($e->getMessage());
             }
 
         }

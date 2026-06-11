@@ -25,7 +25,8 @@ class FinancialReleases extends Model
         'amount_paid',
         'observation',
         'notes',
-        'email_status'
+        'email_status',
+        'logs'
     ];
 
     protected $casts = [
