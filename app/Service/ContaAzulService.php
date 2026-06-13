@@ -4,6 +4,7 @@
 
     use App\Models\Tokens;
     use Illuminate\Support\Facades\Http;
+    use Illuminate\Support\Facades\Log;
 
     class ContaAzulService{
 
@@ -41,6 +42,8 @@
                 $getEventResponse = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $tokenValidate->access_token,
                 ])->get(env('CONTA_AZUL_DOMAIN') . '/financeiro/eventos-financeiros/'.$eventId.'/parcelas');
+
+                Log::info('Resposta da API de obtenção do evento: ' . $getEventResponse->body());
 
                 if($getEventResponse->status() === 200){
                     return $getEventResponse->json();

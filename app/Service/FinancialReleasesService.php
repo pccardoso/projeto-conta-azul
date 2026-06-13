@@ -10,12 +10,14 @@
     use Symfony\Component\HttpKernel\Exception\HttpException;
     use Illuminate\Support\Facades\Http;
     use Illuminate\Support\Facades\Log;
+    use App\Service\PipefyService;
 
     class FinancialReleasesService
     {
 
         public function __construct(
-            protected ContaAzulService $contaAzulService
+            protected ContaAzulService $contaAzulService,
+            protected PipefyService $pipefyService
         ){}
         
         public function createFinancialRelease(array $data){
@@ -129,10 +131,11 @@
 
         public function sendEmailBeneficiary(int $idCardFinancial, FinancialReleases $financialReleases){
 
+            $statusEmail = false;
+
             try{
 
                 $dataBeneficiary = $this->getArrayBeneficiaryPipefy($idCardFinancial);
-
 
                 if(!empty($dataBeneficiary)){
 
@@ -141,9 +144,13 @@
                     Log::info('E-mail do beneficiário: ' . $email);
 
                     if(empty($email)){
+
                         $financialReleases->update([
                             'logs' => "E-mail do beneficiário nulo."
                         ]);
+
+                        $statusEmail = "E-mail do beneficiário nulo.";
+
                     }else{
 
                         Mail::to('xoxo.sto2024@gmail.com')->queue(new SendEmailOficina([
@@ -156,6 +163,8 @@
                             'logs' => "E-mail enviado com sucesso."
                         ]);
 
+                        $statusEmail = "E-mail enviado com sucesso.";
+
                     }
                 }else{
 
@@ -164,9 +173,24 @@
                         'logs' => "As informações do beneficiário não foram encontradas, validar as configurações."
                     ]);
 
+                    $statusEmail = "As informações do beneficiário não foram encontradas, validar as configurações.";
+
                 }
 
-                
+                $moveCardResponse = $this->pipefyService->moveCard([
+                    "cardId" => $idCardFinancial,
+                    "phaseId" => 343385761
+                ]);
+
+                $updateCardResponse =$this->pipefyService->updateCard([
+                    "cardId" => $idCardFinancial,
+                    "fields" => [
+                        [
+                            "field_id" => "e_mail_enviado",
+                            "field_value" => $statusEmail
+                        ]
+                    ]
+                ]);
 
             }catch(\Exception $e){
                 Log::error($e->getMessage());
