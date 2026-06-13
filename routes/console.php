@@ -7,6 +7,6 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-//Schedule::command('app:refresh-token-command')->cron('*/55 * * * *');
+Schedule::command('app:refresh-token-command')->cron('*/55 * * * *');
 
-//Schedule::command('app:validate-financial-command')->cron('*/50 * * * *');
+Schedule::command('app:validate-financial-command')->cron('*/50 * * * *');
