@@ -93,10 +93,13 @@
                                 $idCardBeneficiary = data_get($dataCardParent, ('child_relations.' . $configCurrent["position_beneficiary"] . '.cards.0.id'), false);
 
                                 if($idCardBeneficiary){
+                                    
                                     $responseCardBeneficiary = Http::withHeaders([
                                         'Content-Type' => 'application/json',
                                         'Accept' => 'application/json'
                                     ])->get('https://integration-pipefy.mundoevogard.com/pipefy/card/' . $idCardBeneficiary);
+
+
 
                                     if($responseCardBeneficiary->status() === 200){
                                         $dataCardBeneficiary = $responseCardBeneficiary->json();

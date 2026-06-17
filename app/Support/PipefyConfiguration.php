@@ -14,14 +14,10 @@ class PipefyConfiguration{
 
     const CONFIG_RELATIONS = [
         [
-            "pipe_id" => 306807029,
-            "position_parent_relation" => 3,
-            "position_beneficiary" => 0
-        ],
-        [
-            "pipe_id" => 306993989,
+            "pipe_id" => 307203830,
             "position_parent_relation" => 7,
-            "position_beneficiary" => 0
+            "position_beneficiary" => 1,
+            "position_bank_details" => 0
         ]
     ];
 
