@@ -131,7 +131,10 @@
 
         public function sendEmailBeneficiary(int $idCardFinancial, FinancialReleases $financialReleases){
 
-            $statusEmail = false;
+            $statusEmail = [
+                "logs" => null,
+                "id_label" => null
+            ];
 
             try{
 
@@ -145,11 +148,8 @@
 
                     if(empty($email)){
 
-                        $financialReleases->update([
-                            'logs' => "E-mail do beneficiário nulo."
-                        ]);
-
-                        $statusEmail = "E-mail do beneficiário nulo.";
+                        data_set($statusEmail, 'logs', "E-mail do beneficiário nulo.");
+                        data_set($statusEmail, 'id_label', "317777251");
 
                     }else{
 
@@ -158,37 +158,25 @@
                             ...$financialReleases->toArray()
                         ]));
 
-                        $financialReleases->update([
-                            'email_status' => true,
-                            'logs' => "E-mail enviado com sucesso."
-                        ]);
-
-                        $statusEmail = "E-mail enviado com sucesso.";
+                        data_set($statusEmail, 'logs', "E-mail enviado com sucesso.");
+                        data_set($statusEmail, 'id_label', "317777253");
 
                     }
                 }else{
 
-                    Log::info('As informações do beneficiário não foram encontradas, validar as configurações.');
-                    $financialReleases->update([
-                        'logs' => "As informações do beneficiário não foram encontradas, validar as configurações."
-                    ]);
-
-                    $statusEmail = "As informações do beneficiário não foram encontradas, validar as configurações.";
+                    data_set($statusEmail, 'logs', "As informações do beneficiário não foram encontradas, validar as configurações.");
+                    data_set($statusEmail, 'id_label', "317777271");
 
                 }
 
-                $moveCardResponse = $this->pipefyService->moveCard([
-                    "cardId" => $idCardFinancial,
-                    "phaseId" => 343385761
+                $financialReleases->update([
+                    'logs' => data_get($statusEmail, 'logs', "Evento de e-mail não identificado."),
                 ]);
 
-                $updateCardResponse =$this->pipefyService->updateCard([
+                $updateCardResponse =$this->pipefyService->updateLabel([
                     "cardId" => $idCardFinancial,
-                    "fields" => [
-                        [
-                            "field_id" => "e_mail_enviado",
-                            "field_value" => $statusEmail
-                        ]
+                    "labelIds" => [
+                        data_get($statusEmail, 'id_label')
                     ]
                 ]);
 

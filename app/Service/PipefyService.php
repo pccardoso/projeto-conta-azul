@@ -44,5 +44,20 @@
 
         }
 
+        public function updateLabel(array $data){
+
+            $responseUpdateLabel = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json'
+            ])->put('https://integration-pipefy.mundoevogard.com/pipefy/update-card-label', $data);
+
+            if($responseUpdateLabel->status() === 200){
+                return $responseUpdateLabel->json();
+            }
+
+            return false;
+
+        }
+
 
     }

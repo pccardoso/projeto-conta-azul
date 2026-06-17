@@ -92,9 +92,16 @@
                             <table width="100%" cellpadding="0" cellspacing="0"
                                    style="background:#ecfdf5;border-left:5px solid #10b981;border-radius:8px;">
                                 <tr>
-                                    <td style="padding:20px;color:#065f46;font-size:15px;line-height:1.6;">
-                                        O pagamento foi concluído e encaminhado para os dados
-                                        bancários cadastrados em nosso sistema.
+                                    <td width="40" valign="top" style="padding:20px 0 20px 20px;font-size:22px;line-height:1;">
+                                        💰
+                                    </td>
+                                    <td style="padding:20px 20px 20px 0;color:#065f46;font-size:15px;line-height:1.6;">
+                                        O pagamento foi realizadi no dia
+                                            {{ isset($payload['payment_date']) 
+                                                ? \Carbon\Carbon::parse($payload['payment_date'])->format('d/m/Y') 
+                                                : 'não informado' 
+                                            }}
+                                        , para a seguinte conta bancária: exemple.
                                     </td>
                                 </tr>
                             </table>

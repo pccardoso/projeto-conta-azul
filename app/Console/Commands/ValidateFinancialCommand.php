@@ -38,6 +38,7 @@ class ValidateFinancialCommand extends Command
 
                 $statusEvent = data_get($dataEventFinancial, '0.status', null);
                 $paidAmount = data_get($dataEventFinancial, '0.valor_pago', null);
+                $datePayment = data_get($dataEventFinancial, '0.baixas.0.data_pagamento', null);
 
 
                 if($statusEvent === StatusFinancialEnum::QUITADO->value){
@@ -46,7 +47,9 @@ class ValidateFinancialCommand extends Command
 
                     $financial->update([
                         'status' => StatusFinancialEnum::QUITADO,
-                        'amount_paid' => $paidAmount]);
+                        'amount_paid' => $paidAmount,
+                        'payment_date' => $datePayment
+                    ]);
 
                 }
 
