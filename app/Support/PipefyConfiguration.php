@@ -21,6 +21,7 @@ class PipefyConfiguration{
         ]
     ];
 
+
     public static function getRelations(){
         return self::CONFIG_RELATIONS;
     }

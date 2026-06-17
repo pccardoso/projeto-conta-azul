@@ -99,12 +99,46 @@
                                         'Accept' => 'application/json'
                                     ])->get('https://integration-pipefy.mundoevogard.com/pipefy/card/' . $idCardBeneficiary);
 
-
-
                                     if($responseCardBeneficiary->status() === 200){
+
                                         $dataCardBeneficiary = $responseCardBeneficiary->json();
+
+                                        $dataBankDetails = [];
+
+                                        //Buscar informações de pagamento
+                                        if($configCurrent['position_bank_details'] >= 0){
+
+                                            $idBankDetails = data_get($dataCardBeneficiary, ('child_relations.' . $configCurrent["position_bank_details"] . '.cards.0.id'), false);
+
+                                            if($idBankDetails){
+
+                                                $responseBankDetails = Http::withHeaders([
+                                                    'Content-Type' => 'application/json',
+                                                    'Accept' => 'application/json'
+                                                ])->get('https://integration-pipefy.mundoevogard.com/pipefy/card/' . $idBankDetails);
+
+                                                if($responseBankDetails->status() === 200){
+
+                                                    $dataBankDetails = $responseBankDetails->json();
+
+                                                }
+
+                                            }
+
+                                        }
                                         
                                         $dataFields = array_column($dataCardBeneficiary['fields'], 'value', 'name');
+
+                                        if (!empty($dataBankDetails['fields'])) {
+
+                                            $bankFields = array_column(
+                                                $dataBankDetails['fields'],
+                                                'value',
+                                                'name'
+                                            );
+
+                                            $dataFields = array_merge($dataFields, $bankFields);
+                                        }
 
                                         return $dataFields;
 

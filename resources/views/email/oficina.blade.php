@@ -96,12 +96,36 @@
                                         💰
                                     </td>
                                     <td style="padding:20px 20px 20px 0;color:#065f46;font-size:15px;line-height:1.6;">
-                                        O pagamento foi realizadi no dia
-                                            {{ isset($payload['payment_date']) 
-                                                ? \Carbon\Carbon::parse($payload['payment_date'])->format('d/m/Y') 
-                                                : 'não informado' 
-                                            }}
-                                        , para a seguinte conta bancária: exemple.
+                                        O pagamento foi dado baixa no dia
+                                            <strong>{{ isset($payload['payment_date'])
+                                                ? \Carbon\Carbon::parse($payload['payment_date'])->format('d/m/Y')
+                                                : 'não informado'
+                                            }}</strong>.
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Dados bancários da baixa -->
+                            <table width="100%" cellpadding="0" cellspacing="0"
+                                   style="margin-top:20px;background:#eff6ff;border-left:5px solid #2563eb;border-radius:8px;">
+                                <tr>
+                                    <td width="40" valign="top" style="padding:20px 0 20px 20px;font-size:22px;line-height:1;">
+                                        🏦
+                                    </td>
+                                    <td style="padding:20px 20px 20px 0;color:#1e3a8a;font-size:15px;line-height:1.6;">
+                                        <strong>Dados bancários da baixa:</strong>
+                                        <br><br>
+
+                                        <strong>Titular:</strong> {{ $payload['Titular'] ?? '-' }}<br>
+                                        <strong>Banco:</strong> {{ $payload['Banco'] ?? '-' }}<br>
+                                        <strong>Agência:</strong> {{ $payload['Agência'] ?? '-' }}<br>
+                                        <strong>Conta e Dígito:</strong> {{ $payload['Conta e Digito'] ?? '-' }}<br>
+
+                                        @if(($payload['Tipo de Chave Pix'] ?? null) === 'E-mail' && !empty($payload['PIX - E-mail']))
+                                            <strong>PIX (E-mail):</strong> {{ $payload['PIX - E-mail'] }}<br>
+                                        @elseif(!empty($payload['Tipo de Chave Pix']) && !empty($payload['PIX - Chave Aleatória']))
+                                            <strong>PIX ({{ $payload['Tipo de Chave Pix'] }}):</strong> {{ $payload['PIX - Chave Aleatória'] }}<br>
+                                        @endif
                                     </td>
                                 </tr>
                             </table>
@@ -113,7 +137,6 @@
                             <p style="font-size:16px;color:#333333;line-height:1.8;">
                                 Atenciosamente,<br>
                                 <strong>Equipe Financeira</strong><br>
-                                Guardian Proteção Veicular
                             </p>
 
                         </td>
