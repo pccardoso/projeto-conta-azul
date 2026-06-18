@@ -6,7 +6,6 @@
     use App\Service\ContaAzulService;
     use Illuminate\Support\Facades\Mail;
     use App\Mail\SendEmailOficina;
-    use App\Support\PipefyConfiguration;
     use Symfony\Component\HttpKernel\Exception\HttpException;
     use Illuminate\Support\Facades\Http;
     use Illuminate\Support\Facades\Log;
@@ -61,12 +60,6 @@
 
             try{
 
-                $configPipeRelations = PipefyConfiguration::getRelations();
-
-                if(empty($configPipeRelations)){
-                    throw new HttpException(400, 'Nenhuma configuração de relacionamento foi encontrada.');
-                }
-
                 $responseCardFinancial = Http::withHeaders([
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json'
@@ -76,92 +69,68 @@
                 
                     $dataCardFinancial = $responseCardFinancial->json();
 
-                    foreach ($configPipeRelations as $key => $configCurrent) {
-                    
-                        $idCardParent = data_get($dataCardFinancial, ('parent_relations.' . $configCurrent["position_parent_relation"] . '.cards.0.id'), false);
+                    $typeBeneficiary = data_get($dataCardFinancial, 'fields.10.value', null);
 
-                        if($idCardParent){
-                            $responseCardParent = Http::withHeaders([
-                                'Content-Type' => 'application/json',
-                                'Accept' => 'application/json'
-                            ])->get('https://integration-pipefy.mundoevogard.com/pipefy/card/' . $idCardParent);
+                    $positionBeneficiary = match ($typeBeneficiary) {
+                        "Oficina" => 0,
+                        "Fornecedor" => 1,
+                    };
 
-                            if($responseCardParent->status() === 200){
-                            
-                                $dataCardParent = $responseCardParent->json();
+                    $idCardBeneficiary = data_get($dataCardFinancial, ('child_relations.'.$positionBeneficiary.'.cards.0.id'), false);
 
-                                $idCardBeneficiary = data_get($dataCardParent, ('child_relations.' . $configCurrent["position_beneficiary"] . '.cards.0.id'), false);
+                    if($idCardBeneficiary){
+                        
+                        $responseCardBeneficiary = Http::withHeaders([
+                            'Content-Type' => 'application/json',
+                            'Accept' => 'application/json'
+                        ])->get('https://integration-pipefy.mundoevogard.com/pipefy/card/' . $idCardBeneficiary);
 
-                                if($idCardBeneficiary){
-                                    
-                                    $responseCardBeneficiary = Http::withHeaders([
-                                        'Content-Type' => 'application/json',
-                                        'Accept' => 'application/json'
-                                    ])->get('https://integration-pipefy.mundoevogard.com/pipefy/card/' . $idCardBeneficiary);
+                        if($responseCardBeneficiary->status() === 200){
 
-                                    if($responseCardBeneficiary->status() === 200){
+                            $dataCardBeneficiary = $responseCardBeneficiary->json();
 
-                                        $dataCardBeneficiary = $responseCardBeneficiary->json();
+                            $dataBankDetails = [];
 
-                                        $dataBankDetails = [];
+                            $positionBank = data_get($dataCardBeneficiary, 'child_relations.0.cards.0.id', false);
 
-                                        //Buscar informações de pagamento
-                                        if($configCurrent['position_bank_details'] >= 0){
+                            //Buscar informações de pagamento
+                            if($positionBank){
 
-                                            $idBankDetails = data_get($dataCardBeneficiary, ('child_relations.' . $configCurrent["position_bank_details"] . '.cards.0.id'), false);
+                                $responseBankDetails = Http::withHeaders([
+                                    'Content-Type' => 'application/json',
+                                    'Accept' => 'application/json'
+                                ])->get('https://integration-pipefy.mundoevogard.com/pipefy/card/' . $positionBank);
 
-                                            if($idBankDetails){
-
-                                                $responseBankDetails = Http::withHeaders([
-                                                    'Content-Type' => 'application/json',
-                                                    'Accept' => 'application/json'
-                                                ])->get('https://integration-pipefy.mundoevogard.com/pipefy/card/' . $idBankDetails);
-
-                                                if($responseBankDetails->status() === 200){
-
-                                                    $dataBankDetails = $responseBankDetails->json();
-
-                                                }
-
-                                            }
-
-                                        }
-                                        
-                                        $dataFields = array_column($dataCardBeneficiary['fields'], 'value', 'name');
-
-                                        if (!empty($dataBankDetails['fields'])) {
-
-                                            $bankFields = array_column(
-                                                $dataBankDetails['fields'],
-                                                'value',
-                                                'name'
-                                            );
-
-                                            $dataFields = array_merge($dataFields, $bankFields);
-                                        }
-
-                                        return $dataFields;
-
-                                    }
+                                if($responseBankDetails->status() === 200){
+                                    $dataBankDetails = $responseBankDetails->json();
                                 }
 
-                                continue;
-
                             }
+                            
+                            $dataFields = array_column($dataCardBeneficiary['fields'], 'value', 'name');
+
+                            if (!empty($dataBankDetails['fields'])) {
+
+                                $bankFields = array_column(
+                                    $dataBankDetails['fields'],
+                                    'value',
+                                    'name'
+                                );
+
+                                $dataFields = array_merge($dataFields, $bankFields);
+                            }
+
+                            return $dataFields;
+
                         }
-
-                        continue;
-
                     }
-
-                    Log::error('Nenhuma configuração de relacionamento foi encontrada para o card: '.$idCardFinancial);
 
                     return [];
 
                 }
 
             }catch(\Exception $e){
-                throw new \Exception($e->getMessage());
+                Log::error($e->getMessage());
             }
 
         }
