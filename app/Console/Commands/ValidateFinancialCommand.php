@@ -10,6 +10,7 @@ use App\Service\ContaAzulService;
 use App\Service\FinancialReleasesService;
 use App\Enum\StatusFinancialEnum;
 use Illuminate\Support\Facades\Log;
+use App\Service\PipefyService;
 
 
 #[Signature('app:validate-financial-command')]
@@ -21,7 +22,8 @@ class ValidateFinancialCommand extends Command
      */
     public function handle(
         ContaAzulService $contaAzulService,
-        FinancialReleasesService $financialReleasesService
+        FinancialReleasesService $financialReleasesService,
+        PipefyService $pipefyService
     )
     {
         $listFinancial = FinancialReleases::where([
@@ -42,14 +44,20 @@ class ValidateFinancialCommand extends Command
 
 
                 if($statusEvent === StatusFinancialEnum::QUITADO->value){
-
                     $financial->update([
                         'status' => StatusFinancialEnum::QUITADO,
                         'amount_paid' => $paidAmount,
                         'payment_date' => $datePayment
                     ]);
 
+                    //Enviar E-mail
                     $financialReleasesService->sendEmailBeneficiary($financial->id_card_pipefy, $financial);
+
+                    //Mover o cartão para Quitado
+                    $pipefyService->updateStatusCard([
+                        "cardId" => $financial->id_card_pipefy,
+                        "phaseId" => "341980295"
+                    ]);
 
                 }
 
