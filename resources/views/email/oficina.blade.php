@@ -16,19 +16,45 @@
 
                     <!-- Cabeçalho -->
                     <tr>
-                        <td align="center" style="background:#1e3a8a;padding:30px;">
+                        <td align="center" style="background:#0f2a44;padding:30px;">
 
                             <img
                                 src="https://s3-database.mundoevogard.com/logos/evogard.png"
                                 alt="Evogard"
-                                style="max-width:220px;height:auto;display:block;margin-bottom:20px;"
+                                style="max-width:220px;height:auto;display:block;margin:0 auto 20px;"
                             >
 
-                            <h1 style="margin:0;color:#ffffff;font-size:24px;">
+                            <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
+                                <tr>
+                                    <td align="center" style="padding:0 10px;">
+                                        <img
+                                            src="https://s3-database.mundoevogard.com/logos/cobertura-total.png"
+                                            alt="Cobertura Total"
+                                            style="max-width:140px;height:auto;display:block;"
+                                        >
+                                    </td>
+                                    <td align="center" style="padding:0 10px;">
+                                        <img
+                                            src="https://s3-database.mundoevogard.com/logos/meu-veiculo.png"
+                                            alt="Meu Veículo"
+                                            style="max-width:140px;height:auto;display:block;"
+                                        >
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+
+                    <!-- Título -->
+                    <tr>
+                        <td align="center" style="background:#ffffff;padding:25px 30px 0;">
+
+                            <h1 style="margin:0;color:#0f2a44;font-size:24px;">
                                 Pagamento Realizado
                             </h1>
 
-                            <p style="margin-top:10px;color:#dbeafe;font-size:14px;">
+                            <p style="margin-top:10px;color:#16a974;font-size:14px;font-weight:bold;">
                                 Confirmação de pagamento ao prestador
                             </p>
 
@@ -51,11 +77,11 @@
 
                             <!-- Card de informações -->
                             <table width="100%" cellpadding="0" cellspacing="0"
-                                   style="margin:30px 0;background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;">
+                                   style="margin:30px 0;background:#f8fafc;border:1px solid #e5e7eb;border-left:4px solid #16a974;border-radius:10px;">
                                 <tr>
                                     <td style="padding:25px;">
 
-                                        <h2 style="margin-top:0;color:#1e3a8a;font-size:18px;">
+                                        <h2 style="margin-top:0;color:#0f2a44;font-size:18px;">
                                             Dados do Beneficiário
                                         </h2>
 
@@ -107,12 +133,12 @@
 
                             <!-- Dados bancários da baixa -->
                             <table width="100%" cellpadding="0" cellspacing="0"
-                                   style="margin-top:20px;background:#eff6ff;border-left:5px solid #2563eb;border-radius:8px;">
+                                   style="margin-top:20px;background:#eef3f7;border-left:5px solid #0f2a44;border-radius:8px;">
                                 <tr>
                                     <td width="40" valign="top" style="padding:20px 0 20px 20px;font-size:22px;line-height:1;">
                                         🏦
                                     </td>
-                                    <td style="padding:20px 20px 20px 0;color:#1e3a8a;font-size:15px;line-height:1.6;">
+                                    <td style="padding:20px 20px 20px 0;color:#0f2a44;font-size:15px;line-height:1.6;">
                                         <strong>Dados bancários da baixa:</strong>
                                         <br><br>
 
