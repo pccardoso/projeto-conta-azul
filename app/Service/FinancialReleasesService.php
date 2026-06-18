@@ -69,14 +69,17 @@
                 
                     $dataCardFinancial = $responseCardFinancial->json();
 
-                    $typeBeneficiary = data_get($dataCardFinancial, 'fields.10.value', null);
+                    $listFieldCard = data_get($dataCardFinancial, 'fields', []);
 
-                    $positionBeneficiary = match ($typeBeneficiary) {
+                    $value = collect($listFieldCard)->firstWhere('name', 'Tipo Beneficiário')['value'] ?? null;
+
+                    $positionBeneficiary = match ($value) {
                         "Oficina" => 0,
                         "Fornecedor" => 1,
                     };
 
                     $idCardBeneficiary = data_get($dataCardFinancial, ('child_relations.'.$positionBeneficiary.'.cards.0.id'), false);
+
 
                     if($idCardBeneficiary){
                         
@@ -131,6 +134,11 @@
 
             }catch(\Exception $e){
                 Log::error($e->getMessage());
+                return [
+                    'error' => $e->getMessage(),
+                    'code' => $e->getCode(),
+                    'line' => $e->getLine()
+                ];
             }
 
         }
