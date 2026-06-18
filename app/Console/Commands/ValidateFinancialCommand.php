@@ -54,7 +54,7 @@ class ValidateFinancialCommand extends Command
                     $financialReleasesService->sendEmailBeneficiary($financial->id_card_pipefy, $financial);
 
                     //Mover o cartão para Quitado
-                    $pipefyService->updateStatusCard([
+                    $pipefyService->moveCard([
                         "cardId" => $financial->id_card_pipefy,
                         "phaseId" => "341980295"
                     ]);
