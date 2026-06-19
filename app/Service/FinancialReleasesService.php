@@ -21,14 +21,14 @@
         
         public function createFinancialRelease(array $data){
 
-            $getEventId = $this->contaAzulService->getProtocol($data['protocol']);
+            $getEventId = $this->contaAzulService->getProtocol($data['protocol'], $data['base_integration']);
             
             data_set($data, 'event', $getEventId['evento_financeiro_id'] ?? null);
 
             if($getEventId){
 
                 //Recuperando mais dados do Evento
-                $dataEvent = $this->contaAzulService->getEvent($getEventId['evento_financeiro_id']);
+                $dataEvent = $this->contaAzulService->getEvent($getEventId['evento_financeiro_id'], $data['base_integration']);
 
                 $tipoEvento = data_get($dataEvent, '0.evento.tipo', null);
                 $dataCompetencia = data_get($dataEvent, '0.evento.data_competencia', null);
@@ -49,7 +49,8 @@
                     'due_date_expected' => $dataPagamentoPrevisto,
                     //'amount_paid' => $amountPaid,
                     'observation' => $observation,
-                    'notes' => $notes
+                    'notes' => $notes,
+                    'base_integration' => $data['base_integration']
                 ]);
 
             }
@@ -79,7 +80,6 @@
                     };
 
                     $idCardBeneficiary = data_get($dataCardFinancial, ('child_relations.'.$positionBeneficiary.'.cards.0.id'), false);
-
 
                     if($idCardBeneficiary){
                         
@@ -184,7 +184,7 @@
                 }
 
                 $financialReleases->update([
-                    'logs' => data_get($statusEmail, 'logs', "Evento de e-mail não identificado."),
+                    'logs' => data_get($statusEmail, 'logs', "Evento de e-mail não identificado.")
                 ]);
 
                 $updateCardResponse =$this->pipefyService->updateLabel([

@@ -34,7 +34,7 @@ class ValidateFinancialCommand extends Command
         
         foreach ($listFinancial as $financial) {
 
-            $dataEventFinancial = $contaAzulService->getEvent($financial->event);
+            $dataEventFinancial = $contaAzulService->getEvent($financial->event, $financial->base_integration);
 
             if($dataEventFinancial){
 

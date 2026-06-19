@@ -5,15 +5,19 @@
     use App\Models\Tokens;
     use Illuminate\Support\Facades\Http;
     use Illuminate\Support\Facades\Log;
+    use App\Enum\TypeIntegrationContaAzulEnum;
 
     class ContaAzulService{
 
 
-        public function getProtocol(string $protocol){
+        public function getProtocol(string $protocol, string $baseIntegracao){
 
             try{
 
-                $tokenValidate = Tokens::first();
+                $tokenValidate = Tokens::where(
+                    'id',
+                    $baseIntegracao === TypeIntegrationContaAzulEnum::COBERTURA_TOTAL->value ? 2 : 1
+                )->first();
                 
                 $getProtocolResponse = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $tokenValidate->access_token,
@@ -33,11 +37,14 @@
 
         }
 
-        public function getEvent(string $eventId){
+        public function getEvent(string $eventId, string $baseIntegracao){
 
             try{
 
-                $tokenValidate = Tokens::first();
+                $tokenValidate = Tokens::where(
+                    'id',
+                    $baseIntegracao === TypeIntegrationContaAzulEnum::COBERTURA_TOTAL->value ? 2 : 1
+                )->first();
 
                 $getEventResponse = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $tokenValidate->access_token,
