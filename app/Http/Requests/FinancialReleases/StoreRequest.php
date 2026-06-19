@@ -27,7 +27,8 @@ class StoreRequest extends FormRequest
             'id_card_pipefy' => 'required|numeric',
             'status' => 'required|in:ABERTO,PENDENTE,PAGO,BAIXADO',
             'protocol' => 'required|string|max:255',
-            'event' => 'nullable|string|max:255'
+            'event' => 'nullable|string|max:255',
+            'base_integration' => 'required|in:COBERTURA_TOTAL,MEU_VEICULO'
         ];
     }
 }

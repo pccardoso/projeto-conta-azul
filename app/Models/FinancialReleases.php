@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Enum\StatusFinancialEnum;
+use App\Enum\TypeIntegrationContaAzulEnum;
 
 class FinancialReleases extends Model
 {
@@ -27,11 +28,13 @@ class FinancialReleases extends Model
         'notes',
         'email_status',
         'logs',
-        'payment_date'
+        'payment_date',
+        'base_integration'
     ];
 
     protected $casts = [
         'status' => StatusFinancialEnum::class,
+        'base_integration' => TypeIntegrationContaAzulEnum::class,
         'id_card_pipefy' => 'integer',
         'email_status' => 'boolean'
     ];
