@@ -14,7 +14,7 @@
         
             try{
         
-                $tokenRecord = Tokens::orderBy('created_at', 'asc')->get();
+                $tokenRecord = Tokens::orderBy('id', 'asc')->get();
 
                 Log::info('Dados para validação de token: ' . json_encode($tokenRecord));
 
@@ -58,7 +58,7 @@
                         'access_token' => $response->json()['access_token'],
                         'refresh_token' => $response->json()['refresh_token'],
                     ]);
-                    
+
                 } else {
                     Log::error('Erro ao validar token: ' . $response->body());
                 }
@@ -71,7 +71,14 @@
 
         public function acessToken()
         {
-            return Tokens::first();
+
+            $tokens = Tokens::orderBy('id', 'asc')->get();
+
+            return [
+                "MEU_VEICULO" => $tokens[0],
+                "COBERTURA_TOTAL" => $tokens[1],
+            ];
+
         }
 
     }
