@@ -34,7 +34,6 @@ class FinancialReleases extends Model
 
     protected $casts = [
         'status' => StatusFinancialEnum::class,
-        'base_integration' => TypeIntegrationContaAzulEnum::class,
         'id_card_pipefy' => 'integer',
         'email_status' => 'boolean'
     ];
