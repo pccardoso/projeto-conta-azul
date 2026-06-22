@@ -8,4 +8,5 @@ enum StatusFinancialEnum: string
     case PENDENTE = 'PENDENTE';
     case PAGO = 'PAGO';
     case QUITADO = 'QUITADO';
+    case ATRASADO = 'ATRASADO';
 }

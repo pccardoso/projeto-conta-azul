@@ -26,8 +26,10 @@ class ValidateFinancialCommand extends Command
         PipefyService $pipefyService
     )
     {
-        $listFinancial = FinancialReleases::where([
-            ['status', '=', StatusFinancialEnum::PENDENTE],
+        
+        $listFinancial = FinancialReleases::whereIn('status', [
+            StatusFinancialEnum::PENDENTE,
+            StatusFinancialEnum::ATRASADO,
         ])
         ->whereNotNull('event')
         ->get();
