@@ -55,7 +55,7 @@
                             </h1>
 
                             <p style="margin-top:10px;color:#16a974;font-size:14px;font-weight:bold;">
-                                Confirmação de pagamento ao prestador
+                                Confirmação de pagamento do(a) {{ $payload['Tipo de vínculo'] ?? 'Oficina' }}
                             </p>
 
                         </td>
@@ -67,7 +67,7 @@
 
                             <p style="font-size:16px;color:#333333;line-height:1.8;margin-top:0;">
                                 Olá,
-                                <strong>{{ $payload['Nome do Responsável'] ?? 'Prestador' }}</strong>.
+                                <strong>{{ $payload['Nome do Responsável'] ?? '--' }}</strong>.
                             </p>
 
                             <p style="font-size:16px;color:#333333;line-height:1.8;">
