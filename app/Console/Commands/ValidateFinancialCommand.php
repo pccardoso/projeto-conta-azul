@@ -63,6 +63,18 @@ class ValidateFinancialCommand extends Command
 
                 }
 
+                if($statusEvent === StatusFinancialEnum::ATRASADO->value){
+                    $financial->update([
+                        'status' => StatusFinancialEnum::ATRASADO,
+                    ]);
+
+                    //Mover o cartão para fase Atrasado
+                    $pipefyService->moveCard([
+                        "cardId" => $financial->id_card_pipefy,
+                        "phaseId" => 343487714
+                    ]);
+                }
+
             }
 
         }
