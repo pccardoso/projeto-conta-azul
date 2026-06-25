@@ -58,4 +58,18 @@
             return false;
 
         }
+
+        public function getCard(int $idCard){
+
+            $responseGetCard = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json'
+            ])->get('https://integration-pipefy.mundoevogard.com/pipefy/card/'.$idCard);
+
+            if($responseGetCard->status() === 200){
+                return $responseGetCard->json();
+            }
+
+            return false;
+        }
     }

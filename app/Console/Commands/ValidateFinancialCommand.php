@@ -46,6 +46,7 @@ class ValidateFinancialCommand extends Command
 
 
                 if($statusEvent === StatusFinancialEnum::QUITADO->value){
+
                     $financial->update([
                         'status' => StatusFinancialEnum::QUITADO,
                         'amount_paid' => $paidAmount,
@@ -55,11 +56,36 @@ class ValidateFinancialCommand extends Command
                     //Enviar E-mail
                     $financialReleasesService->sendEmailBeneficiary($financial->id_card_pipefy, $financial);
 
-                    //Mover o cartão para Quitado
-                    $pipefyService->moveCard([
-                        "cardId" => $financial->id_card_pipefy,
-                        "phaseId" => 341980295
-                    ]);
+                    
+                    //Obter dados do cartão
+                    $dataCardFinancial = $pipefyService->getCard($financial->id_card_pipefy);
+
+                    //Obter campos do cartão
+                    $fieldsCards = data_get($dataEventFinancial, 'fields', []);
+
+                    //Validando se há o campo de Nota fiscal
+                    $fieldAttachmentNFe = collect($fieldsCards)->first(function ($field) {
+                        return data_get($field, 'name') === 'Nota fiscal'
+                            && data_get($field, 'value') !== '[]';
+                    });
+
+                    if(!$fieldAttachmentNFe){
+
+                        //Mover o cartão para "Pgt Efetuado - Aguardando NF-e"
+                        $pipefyService->moveCard([
+                            "cardId" => $financial->id_card_pipefy,
+                            "phaseId" => 343533611
+                        ]);
+                        
+                    }else{
+
+                        //Mover o cartão para "Pagamento Efetuado"
+                        $pipefyService->moveCard([
+                            "cardId" => $financial->id_card_pipefy,
+                            "phaseId" => 341980295
+                        ]);
+
+                    }
 
                 }
 
