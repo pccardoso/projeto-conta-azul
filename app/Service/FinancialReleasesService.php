@@ -76,7 +76,10 @@
 
                     $positionBeneficiary = match ($value) {
                         "Oficina" => 0,
-                        "Fornecedor" => 1,
+                        "Fornecedor de Peças" => 1,
+                        "Prestador de Serviços" => 3,
+                        "Associado" => 4,
+                        "Terceiro" => 4
                     };
 
                     $idCardBeneficiary = data_get($dataCardFinancial, ('child_relations.'.$positionBeneficiary.'.cards.0.id'), false);

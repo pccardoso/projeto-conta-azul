@@ -69,6 +69,8 @@ class ValidateFinancialCommand extends Command
                             && data_get($field, 'value') !== '[]';
                     });
 
+                    Log::info('fieldAttachmentNFe: '.json_encode($fieldAttachmentNFe));
+
                     if(!$fieldAttachmentNFe){
 
                         //Mover o cartão para "Pgt Efetuado - Aguardando NF-e"
