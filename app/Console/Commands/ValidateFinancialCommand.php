@@ -61,7 +61,7 @@ class ValidateFinancialCommand extends Command
                     $dataCardFinancial = $pipefyService->getCard($financial->id_card_pipefy);
 
                     //Obter campos do cartão
-                    $fieldsCards = data_get($dataEventFinancial, 'fields', []);
+                    $fieldsCards = data_get($dataCardFinancial, 'fields', []);
 
                     //Validando se há o campo de Nota fiscal
                     $fieldAttachmentNFe = collect($fieldsCards)->first(function ($field) {
