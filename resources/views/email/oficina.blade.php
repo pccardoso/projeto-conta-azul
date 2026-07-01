@@ -71,8 +71,7 @@
                             </p>
 
                             <p style="font-size:16px;color:#333333;line-height:1.8;">
-                                Informamos que o pagamento referente aos serviços prestados foi
-                                processado e realizado com sucesso.
+                                Informamos que o pagamento solicitado foi processado e realizado com sucesso.
                             </p>
 
                             <!-- Card de informações -->
@@ -102,7 +101,7 @@
 
                                         <p style="margin:12px 0;color:#333333;">
                                             <strong>Endereço:</strong><br>
-                                            {{ $payload['Endereço Completo'] ?? '-' }}
+                                            {{ $payload['Logradouro'] ?? '-' }}, {{ $payload['Número'] ?? '-' }} - {{ $payload['Bairro'] ?? '-' }}, {{ $payload['Cidade'] ?? '-' }} - {{ $payload['Estado'] ?? '-' }}, CEP {{ $payload['CEP'] ?? '-' }}
                                         </p>
 
                                         <p style="margin:12px 0;color:#333333;">
