@@ -89,6 +89,22 @@ class ValidateFinancialCommand extends Command
 
                     }
 
+                    //atualizar a data de pagamento
+
+                    $pipefyService->updateCard([
+                        "cardId" => $financial->id_card_pipefy,
+                        "fields" => [
+                            [
+                                "field_id" => "data_do_pagamento",
+                                "field_value" => $datePayment
+                            ],
+                            [
+                                "field_id" => "valor_do_pagamento",
+                                "field_value" => $paidAmount
+                            ]
+                        ]
+                    ]);
+
                 }
 
                 if($statusEvent === StatusFinancialEnum::ATRASADO->value){
