@@ -81,9 +81,16 @@ class FinancialReleasesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        //
+
+        $this->financialReleasesService->removeFinancialRelease($id);
+
+        return response()->json([
+            'message' => 'Lançamento financeiro removido com sucesso',
+            'status' => 200
+        ], 200);
+
     }
 
     public function getArrayBeneficiary(int $idCardFinancial): array{

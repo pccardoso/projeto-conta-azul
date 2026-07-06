@@ -203,4 +203,18 @@
 
         }
 
+        public function removeFinancialRelease (int $id){
+
+            $currentFinancialRelease = FinancialReleases::find($id);
+
+            if(!$currentFinancialRelease){
+                throw new HttpException(404, "Lançamento financeiro não encontrado.");
+            }
+
+            $currentFinancialRelease->delete();
+
+            return true;
+
+        }
+
     }
