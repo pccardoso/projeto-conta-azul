@@ -85,13 +85,13 @@
                                         </h2>
 
                                         <p style="margin:12px 0;color:#333333;">
-                                            <strong>Oficina:</strong><br>
-                                            {{ $payload['Nome da Oficina'] ?? '-' }}
+                                            <strong>Beneficiário:</strong><br>
+                                            {{ $payload['Nome do Beneficiário'] ?? '-' }}
                                         </p>
 
                                         <p style="margin:12px 0;color:#333333;">
-                                            <strong>CNPJ:</strong><br>
-                                            {{ $payload['CNPJ'] ?? '-' }}
+                                            <strong>{{ $payload['Tipo de Beneficiário'] === 'Pessoa Física' ? 'CPF' : 'CNPJ' }}:</strong><br>
+                                            {{ !empty($payload['CNPJ']) ? $payload['CNPJ'] : ($payload['CPF'] ?? '-') }}
                                         </p>
 
                                         <p style="margin:12px 0;color:#333333;">
