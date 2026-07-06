@@ -81,10 +81,10 @@ class FinancialReleasesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $id)
+    public function destroy(int $id, string $type)
     {
 
-        $this->financialReleasesService->removeFinancialRelease($id);
+        $this->financialReleasesService->removeFinancialRelease($id, $type);
 
         return response()->json([
             'message' => 'Lançamento financeiro removido com sucesso',

@@ -10,6 +10,7 @@
     use Illuminate\Support\Facades\Http;
     use Illuminate\Support\Facades\Log;
     use App\Service\PipefyService;
+    use InvalidArgumentException;
 
     class FinancialReleasesService
     {
@@ -203,9 +204,14 @@
 
         }
 
-        public function removeFinancialRelease (int $id){
 
-            $currentFinancialRelease = FinancialReleases::find($id);
+        public function removeFinancialRelease (int $id, string $type){
+
+            if (!in_array($type, ['id', 'id_card_pipefy'])) {
+                throw new InvalidArgumentException('Campo de busca inválido, permitido apenas: id, id_card_pipefy');
+            }
+
+            $currentFinancialRelease = FinancialReleases::where($type, $id)->first();
 
             if(!$currentFinancialRelease){
                 throw new HttpException(404, "Lançamento financeiro não encontrado.");

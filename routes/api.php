@@ -16,7 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('financial-releases')->group(function () {
         Route::post('/', [FinancialReleasesController::class, 'store']);
         Route::get('/get-beneficiary/{idCardFinancial}', [FinancialReleasesController::class, 'getArrayBeneficiary']);
-        Route::delete('/{id}', [FinancialReleasesController::class, 'destroy']);
+        Route::delete('/{id}/{type}', [FinancialReleasesController::class, 'destroy']);
     });
 
     Route::prefix('conta-azul')->group(function () {
