@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Enum\EfiPaymentMethodEnum;
 use App\Service\Efi\EfiPaymentGatewayFactory;
+use App\Http\Requests\Efi\CreateLinkCreditCardRequest;
 
 class EfiApiController extends Controller
 {
@@ -17,11 +18,11 @@ class EfiApiController extends Controller
         return response()->json($gateway->authenticate());
     }
 
-    public function createLinkCreditCard(Request $request)
+    public function createLinkCreditCard(CreateLinkCreditCardRequest $request)
     {
         $gateway = EfiPaymentGatewayFactory::make(EfiPaymentMethodEnum::CREDIT_CARD);
 
-        return response()->json($gateway->gerarPagamento($request->all()));
+        return response()->json($gateway->gerarPagamento($request->validated()));
     }
 
     /**

@@ -25,12 +25,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('get-event/{eventId}', [ContaAzulController::class, 'getEvent']);
     });
 
+    Route::prefix('efi-api')->group(function () {
+        Route::post('authenticate/{typeMethod}', [EfiApiController::class, 'authenticate']);
+        Route::post('create-link-credit-card', [EfiApiController::class, 'createLinkCreditCard']);
+    });
+
 });
 
-Route::prefix('efi-api')->group(function () {
-    Route::post('authenticate/{typeMethod}', [EfiApiController::class, 'authenticate']);
-    Route::post('create-link-credit-card', [EfiApiController::class, 'createLinkCreditCard']);
-});
+
 
 Route::prefix('auth-user')->group(function () {
     Route::post('login', [AuthUserController::class, 'login'])->name('login');
