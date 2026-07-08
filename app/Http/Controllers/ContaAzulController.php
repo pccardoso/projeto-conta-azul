@@ -17,13 +17,13 @@ class ContaAzulController extends Controller
     */
 
     
-    public function getProtocol(string $protocol){
+    public function getProtocol(string $protocol, string $baseIntegracao){
 
         if(empty($protocol)){
             return response()->json(['error' => 'O protocolo é obrigatório.'], 400);
         }
 
-        return $this->contaAzulService->getProtocol($protocol);
+        return $this->contaAzulService->getProtocol($protocol, $baseIntegracao);
     }
 
     /**

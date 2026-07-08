@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('conta-azul')->group(function () {
-        Route::get('get-protocol/{protocol}', [ContaAzulController::class, 'getProtocol']);
+        Route::get('get-protocol/{protocol}/{baseIntegracao}', [ContaAzulController::class, 'getProtocol']);
         Route::get('get-event/{eventId}', [ContaAzulController::class, 'getEvent']);
     });
 
