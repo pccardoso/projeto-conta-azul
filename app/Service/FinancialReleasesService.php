@@ -11,6 +11,7 @@
     use Illuminate\Support\Facades\Log;
     use App\Service\PipefyService;
     use InvalidArgumentException;
+    
 
     class FinancialReleasesService
     {
