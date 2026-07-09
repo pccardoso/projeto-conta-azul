@@ -8,22 +8,18 @@ use Illuminate\Support\Facades\Log;
 
 class EfiPixService implements EfiPaymentGatewayInterface
 {
-    private function certificadoPath(): string
-    {
-        return storage_path('app/private/efi/' . env('EFI_PIX_CERTIFICADO_FILENAME'));
-    }
 
     public function authenticate(): array
     {
         $response = Http::acceptJson()
             ->withOptions([
-                'cert' => $this->certificadoPath(),
+                'cert' => config('services.efi.certificate_path'),
             ])
             ->withBasicAuth(
                 env('EFI_HOMOLOGACAO_CLIENTE_ID'),
                 env('EFI_HOMOLOGACAO_CLIENTE_SECRET')
             )
-            ->post(env('EFI_DOMAIN') . '/v1/authorize', [
+            ->post(config('services.efi.domain_pix') . '/oauth/token', [
                 'grant_type' => 'client_credentials',
             ]);
 
@@ -52,11 +48,11 @@ class EfiPixService implements EfiPaymentGatewayInterface
         }
 
         $response = Http::withOptions([
-            'cert' => $this->certificadoPath(),
+            'cert' => config('services.efi.certificate_path'),
         ])->withHeaders([
             'Authorization' => 'Bearer ' . $accessToken,
             'Content-Type' => 'application/json',
-        ])->post(env('EFI_DOMAIN') . '/v1/cob', $dados);
+        ])->post(config('services.efi.domain_pix') . '/v2/cob', $dados);
 
         return $response->json();
     }
