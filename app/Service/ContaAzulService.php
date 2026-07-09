@@ -21,7 +21,7 @@
                 
                 $getProtocolResponse = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $tokenValidate->access_token,
-                ])->get(env('CONTA_AZUL_DOMAIN') . '/protocolo/' . $protocol);
+                ])->get(config('services.contaazul.domain') . '/protocolo/' . $protocol);
 
                 if($getProtocolResponse->status() === 200){
                     return $getProtocolResponse->json();
@@ -48,7 +48,7 @@
 
                 $getEventResponse = Http::withHeaders([
                     'Authorization' => 'Bearer ' . $tokenValidate->access_token,
-                ])->get(env('CONTA_AZUL_DOMAIN') . '/financeiro/eventos-financeiros/'.$eventId.'/parcelas');
+                ])->get(config('services.contaazul.domain') . '/financeiro/eventos-financeiros/'.$eventId.'/parcelas');
 
                 Log::info('Resposta da API de obtenção do evento: ' . $getEventResponse->body());
 
