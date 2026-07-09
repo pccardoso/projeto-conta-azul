@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'contaazul' => [
+        'domain' => env('CONTA_AZUL_DOMAIN'),
+    ],
+
 ];
