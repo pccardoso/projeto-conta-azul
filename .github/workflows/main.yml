@@ -19,8 +19,9 @@ jobs:
           script: |
             cd /var/www/projeto-conta-azul
             git pull origin master
-            composer install --no-dev --optimize-autoloader
-            php artisan migrate --force
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
+            docker exec conta_azul_app composer install --no-dev --optimize-autoloader
+            docker exec conta_azul_app php artisan migrate --force
+            docker exec conta_azul_app php artisan config:cache
+            docker exec conta_azul_app php artisan route:cache
+            docker exec conta_azul_app php artisan view:cache
+            docker exec conta_azul_app php artisan queue:restart
