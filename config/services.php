@@ -39,4 +39,10 @@ return [
         'domain' => env('CONTA_AZUL_DOMAIN'),
     ],
 
+    'efi' => [
+        'certificate_path' => storage_path('app/private/efi/' . env('EFI_PIX_CERTIFICADO_FILENAME')),
+        'domain_pix' => env('EFI_DOMAIN_PIX'),
+        'domain_credit' => env('EFI_DOMAIN_CREDIT')
+    ]
+
 ];
