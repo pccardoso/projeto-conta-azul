@@ -30,6 +30,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('create-link-credit-card', [EfiApiController::class, 'createLinkCreditCard']);
     });
 
+    Route::get('teste', function () {
+        return response()->json(['message' => 'API is working!']);
+    });
+
 });
 
 
