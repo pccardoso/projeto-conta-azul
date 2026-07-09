@@ -172,7 +172,7 @@
 
                     }else{
 
-                        Mail::to('xoxo.sto2024@gmail.com')->queue(new SendEmailOficina([
+                        Mail::to($email)->queue(new SendEmailOficina([
                             ...$dataBeneficiary,
                             ...$financialReleases->toArray()
                         ]));
