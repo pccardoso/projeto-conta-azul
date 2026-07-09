@@ -15,7 +15,7 @@ class EfiCreditCardService implements EfiPaymentGatewayInterface
                 env('EFI_HOMOLOGACAO_CLIENTE_ID'),
                 env('EFI_HOMOLOGACAO_CLIENTE_SECRET')
             )
-            ->post(env('EFI_DOMAIN') . '/v1/authorize', [
+            ->post(config('services.efi.domain_credit') . '/v1/authorize', [
                 'grant_type' => 'client_credentials',
             ]);
 
@@ -46,7 +46,7 @@ class EfiCreditCardService implements EfiPaymentGatewayInterface
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $accessToken,
             'Content-Type' => 'application/json',
-        ])->post(env('EFI_DOMAIN') . '/v1/charge/one-step/link', $dados);
+        ])->post(config('services.efi.domain_credit') . '/v1/charge/one-step/link', $dados);
 
         return $response->json();
     }

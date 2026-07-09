@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('efi-api')->group(function () {
         Route::post('authenticate/{typeMethod}', [EfiApiController::class, 'authenticate']);
         Route::post('create-link-credit-card', [EfiApiController::class, 'createLinkCreditCard']);
+        Route::post('create-pix', [EfiApiController::class, 'createPix']);
     });
 
     Route::get('teste', function () {

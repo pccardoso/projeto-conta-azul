@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Enum\EfiPaymentMethodEnum;
 use App\Service\Efi\EfiPaymentGatewayFactory;
 use App\Http\Requests\Efi\CreateLinkCreditCardRequest;
+use App\Http\Requests\Efi\CreatePixRequest;
 
 class EfiApiController extends Controller
 {
@@ -21,6 +22,13 @@ class EfiApiController extends Controller
     public function createLinkCreditCard(CreateLinkCreditCardRequest $request)
     {
         $gateway = EfiPaymentGatewayFactory::make(EfiPaymentMethodEnum::CREDIT_CARD);
+
+        return response()->json($gateway->gerarPagamento($request->validated()));
+    }
+
+    public function createPix(CreatePixRequest $request)
+    {
+        $gateway = EfiPaymentGatewayFactory::make(EfiPaymentMethodEnum::PIX);
 
         return response()->json($gateway->gerarPagamento($request->validated()));
     }
