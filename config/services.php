@@ -37,6 +37,14 @@ return [
 
     'contaazul' => [
         'domain' => env('CONTA_AZUL_DOMAIN'),
+        "cobertura_total" => [
+            'client_id' => env('CONTA_AZUL_CLIENT_ID_CE'),
+            'client_secret' => env('CONTA_AZUL_CLIENT_SECRET_CE'),
+        ],
+        "meu_veiculo" => [
+            'client_id' => env('CONTA_AZUL_CLIENT_ID'),
+            'client_secret' => env('CONTA_AZUL_CLIENT_SECRET'),
+        ],
     ],
 
     'efi' => [

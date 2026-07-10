@@ -21,7 +21,7 @@
                 Log::info('*** VALIDANDO TOKEN MEU VEÍCULO');
 
                 $response = Http::asForm()
-                    ->withBasicAuth(env('CONTA_AZUL_CLIENT_ID'), env('CONTA_AZUL_CLIENT_SECRET'))
+                    ->withBasicAuth(config('services.contaazul.meu_veiculo.client_id'), config('services.contaazul.meu_veiculo.client_secret'))
                     ->post('https://auth.contaazul.com/oauth2/token', [
                         'refresh_token' => $tokenRecord[0]->refresh_token,
                         'grant_type' => 'refresh_token',
@@ -43,7 +43,7 @@
                 Log::info('*** VALIDANDO TOKEN COBERTURA TOTAL');
 
                 $response = Http::asForm()
-                    ->withBasicAuth(env('CONTA_AZUL_CLIENT_ID_CE'), env('CONTA_AZUL_CLIENT_SECRET_CE'))
+                    ->withBasicAuth(config('services.contaazul.cobertura_total.client_id'), config('services.contaazul.cobertura_total.client_secret'))
                     ->post('https://auth.contaazul.com/oauth2/token', [
                         'refresh_token' => $tokenRecord[1]->refresh_token,
                         'grant_type' => 'refresh_token',
