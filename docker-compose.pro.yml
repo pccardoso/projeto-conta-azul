@@ -7,6 +7,7 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile
     container_name: conta_azul_app
+    restart: unless-stopped
     working_dir: /var/www/projeto-conta-azul
     volumes:
       - ./:/var/www/projeto-conta-azul
@@ -21,6 +22,7 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile
     container_name: conta_azul_queue
+    restart: unless-stopped
     working_dir: /var/www/projeto-conta-azul
     command: php artisan queue:work --tries=3 --timeout=60
     volumes:
@@ -36,6 +38,7 @@ services:
       context: .
       dockerfile: docker/php/Dockerfile
     container_name: conta_azul_scheduler
+    restart: unless-stopped
     working_dir: /var/www/projeto-conta-azul
     command: php artisan schedule:work
     volumes:
