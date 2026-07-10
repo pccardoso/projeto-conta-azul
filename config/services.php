@@ -50,7 +50,9 @@ return [
     'efi' => [
         'certificate_path' => storage_path('app/private/efi/' . env('EFI_PIX_CERTIFICADO_FILENAME')),
         'domain_pix' => env('EFI_DOMAIN_PIX'),
-        'domain_credit' => env('EFI_DOMAIN_CREDIT')
+        'domain_credit' => env('EFI_DOMAIN_CREDIT'),
+        'client_id' => env('EFI_HOMOLOGACAO_CLIENTE_ID'),
+        'client_secret' => env('EFI_HOMOLOGACAO_CLIENTE_SECRET'),
     ]
 
 ];

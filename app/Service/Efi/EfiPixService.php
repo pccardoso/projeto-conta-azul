@@ -16,8 +16,8 @@ class EfiPixService implements EfiPaymentGatewayInterface
                 'cert' => config('services.efi.certificate_path'),
             ])
             ->withBasicAuth(
-                env('EFI_HOMOLOGACAO_CLIENTE_ID'),
-                env('EFI_HOMOLOGACAO_CLIENTE_SECRET')
+                config('services.efi.client_id'),
+                config('services.efi.client_secret')
             )
             ->post(config('services.efi.domain_pix') . '/oauth/token', [
                 'grant_type' => 'client_credentials',
