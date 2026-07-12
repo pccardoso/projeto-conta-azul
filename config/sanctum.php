@@ -82,6 +82,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Rate Limit do Login
+    |--------------------------------------------------------------------------
+    |
+    | Quantidade máxima de tentativas de login por minuto, combinando e-mail
+    | informado + IP de origem, para mitigar brute-force. Aplicado pelo rate
+    | limiter "login" (ver App\Providers\AppServiceProvider) na rota de login.
+    |
+    */
+
+    'login_rate_limit_per_minute' => env('SANCTUM_LOGIN_RATE_LIMIT_PER_MINUTE', 5),
+
+    /*
+    |--------------------------------------------------------------------------
     | Sanctum Middleware
     |--------------------------------------------------------------------------
     |
