@@ -53,7 +53,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 return response()->json([
                     'status' => 'erro',
                     'codigo' => 429,
-                    'message' => 'Limite de requisições excedido para este token, tente novamente em instantes.',
+                    'message' => 'Limite de requisições excedido, tente novamente em instantes.',
                 ], 429, $e->getHeaders());
             }
         });

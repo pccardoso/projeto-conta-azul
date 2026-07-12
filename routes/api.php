@@ -39,6 +39,6 @@ Route::middleware(['auth:sanctum', 'throttle:sanctum'])->group(function () {
 
 
 
-Route::prefix('auth-user')->group(function () {
+Route::prefix('auth-user')->middleware('throttle:login')->group(function () {
     Route::post('login', [AuthUserController::class, 'login'])->name('login');
 });
