@@ -8,6 +8,7 @@ use App\Http\Controllers\ContaAzulController;
 use App\Http\Controllers\AuthUserController;
 use App\Http\Controllers\EfiApiController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\PeripheralFinancialReleasesController;
 
 Route::middleware(['auth:sanctum', 'throttle:sanctum'])->group(function () {
 
@@ -19,6 +20,12 @@ Route::middleware(['auth:sanctum', 'throttle:sanctum'])->group(function () {
         Route::post('/', [FinancialReleasesController::class, 'store']);
         Route::get('/get-beneficiary/{idCardFinancial}', [FinancialReleasesController::class, 'getArrayBeneficiary']);
         Route::delete('/{id}/{type}', [FinancialReleasesController::class, 'destroy']);
+    });
+
+    Route::prefix('peripheral-financial-releases')->group(function () {
+        Route::post('/', [PeripheralFinancialReleasesController::class, 'store']);
+        Route::get('/id-card-pipefy/{id_card_pipefy}', [PeripheralFinancialReleasesController::class, 'showByIdCardPipefy']);
+        Route::get('/txid-efi/{txid_efi}', [PeripheralFinancialReleasesController::class, 'showByTxidEfi']);
     });
 
     Route::prefix('conta-azul')->group(function () {
