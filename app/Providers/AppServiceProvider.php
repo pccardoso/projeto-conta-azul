@@ -29,5 +29,11 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute(config('sanctum.rate_limit_per_minute'))
                 ->by($tokenId ?? $request->ip());
         });
+
+        RateLimiter::for('login', function (Request $request) {
+
+            return Limit::perMinute(config('sanctum.login_rate_limit_per_minute'))
+                ->by(strtolower((string) $request->input('email')).'|'.$request->ip());
+        });
     }
 }
