@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
@@ -44,6 +45,16 @@ return Application::configure(basePath: dirname(__DIR__))
                     'codigo' => 404,
                     'message' => 'Recurso não encontrado, verifique a URL.',
                 ], 404);
+            }
+        });
+
+        $exceptions->render(function (ThrottleRequestsException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'status' => 'erro',
+                    'codigo' => 429,
+                    'message' => 'Limite de requisições excedido para este token, tente novamente em instantes.',
+                ], 429, $e->getHeaders());
             }
         });
 
