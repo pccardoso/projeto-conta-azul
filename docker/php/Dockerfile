@@ -13,6 +13,9 @@ RUN apt-get update && apt-get install -y \
     zip \
     postgresql-client \
     default-mysql-client \
+    autoconf \
+    g++ \
+    make \
     && rm -rf /var/lib/apt/lists/*
 
 # Instalar extensões do PHP
@@ -26,7 +29,9 @@ RUN docker-php-ext-install \
     pcntl \
     bcmath \
     gd \
-    zip
+    zip \
+    && pecl install redis \
+    && docker-php-ext-enable redis
 
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer

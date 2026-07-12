@@ -74,8 +74,21 @@ services:
     networks:
       - laravel
 
+
+  redis:
+    image: redis:7-alpine
+    container_name: conta_azul_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    networks:
+      - laravel
+
 volumes:
   pgdata:
+  redisdata:
 
 networks:
   laravel:
