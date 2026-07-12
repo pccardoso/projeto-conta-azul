@@ -7,7 +7,6 @@
     use Illuminate\Support\Facades\Mail;
     use App\Mail\SendEmailOficina;
     use Symfony\Component\HttpKernel\Exception\HttpException;
-    use Illuminate\Support\Facades\Http;
     use Illuminate\Support\Facades\Log;
     use App\Service\PipefyService;
     use InvalidArgumentException;
@@ -63,79 +62,46 @@
 
             try{
 
-                $responseCardFinancial = Http::withHeaders([
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json'
-                ])->get('https://integration-pipefy.mundoevogard.com/pipefy/card/' . $idCardFinancial);
+                $dataCardFinancial = $this->pipefyService->getCardWithRelations($idCardFinancial);
 
-                if($responseCardFinancial->status() === 200){
-                
-                    $dataCardFinancial = $responseCardFinancial->json();
-
-                    $listFieldCard = data_get($dataCardFinancial, 'fields', []);
-
-                    $value = collect($listFieldCard)->firstWhere('name', 'Tipo Beneficiário')['value'] ?? null;
-
-                    $positionBeneficiary = match ($value) {
-                        "Oficina" => 0,
-                        "Fornecedor de Peças" => 1,
-                        "Prestador de Serviços" => 3,
-                        "Associado" => 4,
-                        "Terceiro" => 4
-                    };
-
-                    $idCardBeneficiary = data_get($dataCardFinancial, ('child_relations.'.$positionBeneficiary.'.cards.0.id'), false);
-
-                    if($idCardBeneficiary){
-                        
-                        $responseCardBeneficiary = Http::withHeaders([
-                            'Content-Type' => 'application/json',
-                            'Accept' => 'application/json'
-                        ])->get('https://integration-pipefy.mundoevogard.com/pipefy/card/' . $idCardBeneficiary);
-
-                        if($responseCardBeneficiary->status() === 200){
-
-                            $dataCardBeneficiary = $responseCardBeneficiary->json();
-
-                            $dataBankDetails = [];
-
-                            $positionBank = data_get($dataCardBeneficiary, 'child_relations.0.cards.0.id', false);
-
-                            //Buscar informações de pagamento
-                            if($positionBank){
-
-                                $responseBankDetails = Http::withHeaders([
-                                    'Content-Type' => 'application/json',
-                                    'Accept' => 'application/json'
-                                ])->get('https://integration-pipefy.mundoevogard.com/pipefy/card/' . $positionBank);
-
-                                if($responseBankDetails->status() === 200){
-                                    $dataBankDetails = $responseBankDetails->json();
-                                }
-
-                            }
-                            
-                            $dataFields = array_column($dataCardBeneficiary['fields'], 'value', 'name');
-
-                            if (!empty($dataBankDetails['fields'])) {
-
-                                $bankFields = array_column(
-                                    $dataBankDetails['fields'],
-                                    'value',
-                                    'name'
-                                );
-
-                                $dataFields = array_merge($dataFields, $bankFields);
-                            }
-
-                            return $dataFields;
-
-                        }
-                    }
-
+                if(!$dataCardFinancial){
                     return [];
-
                 }
+
+                $listFieldCard = data_get($dataCardFinancial, 'fields', []);
+
+                $value = collect($listFieldCard)->firstWhere('name', 'Tipo Beneficiário')['value'] ?? null;
+
+                $positionBeneficiary = match ($value) {
+                    "Oficina" => 0,
+                    "Fornecedor de Peças" => 1,
+                    "Prestador de Serviços" => 3,
+                    "Associado" => 4,
+                    "Terceiro" => 4
+                };
+
+                $dataCardBeneficiary = data_get($dataCardFinancial, "child_relations.{$positionBeneficiary}.cards.0", false);
+
+                if(!$dataCardBeneficiary){
+                    return [];
+                }
+
+                $dataFields = array_column($dataCardBeneficiary['fields'], 'value', 'name');
+
+                $dataBankDetails = data_get($dataCardBeneficiary, 'child_relations.0.cards.0', []);
+
+                if (!empty($dataBankDetails['fields'])) {
+
+                    $bankFields = array_column(
+                        $dataBankDetails['fields'],
+                        'value',
+                        'name'
+                    );
+
+                    $dataFields = array_merge($dataFields, $bankFields);
+                }
+
+                return $dataFields;
 
             }catch(\Exception $e){
                 Log::error($e->getMessage());
