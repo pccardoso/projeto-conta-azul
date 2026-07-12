@@ -7,6 +7,7 @@ use App\Http\Controllers\FinancialReleasesController;
 use App\Http\Controllers\ContaAzulController;
 use App\Http\Controllers\AuthUserController;
 use App\Http\Controllers\EfiApiController;
+use App\Http\Controllers\TestController;
 
 Route::middleware(['auth:sanctum', 'throttle:sanctum'])->group(function () {
 
@@ -37,8 +38,10 @@ Route::middleware(['auth:sanctum', 'throttle:sanctum'])->group(function () {
 
 });
 
-
-
 Route::prefix('auth-user')->middleware('throttle:login')->group(function () {
     Route::post('login', [AuthUserController::class, 'login'])->name('login');
+});
+
+Route::prefix('test')->group(function () {
+    Route::get('efi', [TestController::class, 'testeReqEfi']);
 });
