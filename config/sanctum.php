@@ -69,6 +69,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Rate Limit
+    |--------------------------------------------------------------------------
+    |
+    | Quantidade máxima de requisições por minuto permitida para cada token
+    | de acesso pessoal do Sanctum. Aplicado pelo rate limiter "sanctum"
+    | (ver App\Providers\AppServiceProvider) na rota "throttle:sanctum".
+    |
+    */
+
+    'rate_limit_per_minute' => env('SANCTUM_RATE_LIMIT_PER_MINUTE', 60),
+
+    /*
+    |--------------------------------------------------------------------------
     | Sanctum Middleware
     |--------------------------------------------------------------------------
     |

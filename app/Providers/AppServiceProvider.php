@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +22,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        RateLimiter::for('sanctum', function (Request $request) {
+
+            $tokenId = $request->user()?->currentAccessToken()?->id;
+
+            return Limit::perMinute(config('sanctum.rate_limit_per_minute'))
+                ->by($tokenId ?? $request->ip());
+        });
     }
 }
