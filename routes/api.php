@@ -50,5 +50,5 @@ Route::prefix('auth-user')->middleware('throttle:login')->group(function () {
 });
 
 Route::prefix('webhook')->group(function () {
-    Route::get('pix', [TestController::class, 'testeReqEfi']);
+    Route::match(['post', 'get'], 'pix', [TestController::class, 'testeReqEfi']);
 });
