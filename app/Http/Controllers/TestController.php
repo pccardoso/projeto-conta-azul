@@ -6,9 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use App\Service\Efi\EfiPixService;
 
 class TestController extends Controller
 {
+
+    public function __construct(
+        protected EfiPixService $efiPixService
+    ){}
 
     public function index()
     {
@@ -23,9 +28,7 @@ class TestController extends Controller
 
     public function testeReqEfi(Request $request)
     {
-        $data = $request->all();
-        Log::info('Dados recebidos na rota testeReqEfi: ' . json_encode($data));
-        return response()->json($data);
+        $this->efiPixService->getPaymentWebhookData($request->all());   
     }
 
 }
