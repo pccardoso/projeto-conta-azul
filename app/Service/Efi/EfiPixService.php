@@ -90,38 +90,54 @@ class EfiPixService implements EfiPaymentGatewayInterface
 
     public function getPaymentWebhookData(array $data): array{
 
-        $listPix = dataget($data, 'pix', []);
+        $listPix = data_get($data, 'pix', []);
 
         if(count($listPix)){
+
+            $responseTxid = [];
         
             foreach($listPix as $pix){
                 
                 $txid = data_get($pix, 'txid', null);
+
+                Log::info('txid recebido no webhook: '.json_encode($txid));
                 
                 if($txid){
+
                     $peripheralFinancialRelease = PeripheralFinancialReleases::where('txid_efi', $txid)->first();
 
                     if($peripheralFinancialRelease){
                     
                         $dataPayment = $this->getTixId($txid);
 
+                        Log::info('Dados do Pix recebido no webhook: '.json_encode($dataPayment));
+
                         if(data_get($dataPayment, 'status', null) === 'CONCLUIDA'){
                         
-                            $this->pipefyService->moveCard([
+                            $responsePipefy = $this->pipefyService->moveCard([
                                 "cardId" => $peripheralFinancialRelease->id_card_pipefy,
                                 "phaseId" => 343120341
                             ]);
+
+                            $responseTxid[] = [
+                                "txid" => $txid,
+                                "response" => $responsePipefy
+                            ];
 
                         }
 
                     }
                 }
 
-
             }
+
+            Log::info('Resposta da API de atualização do card: '.json_encode($responseTxid));
+
+            return $responseTxid;
 
         }
 
+        Log::info('Nenhum Pix encontrado no webhook recebido: '.json_encode($data));
         return [];
 
     }
