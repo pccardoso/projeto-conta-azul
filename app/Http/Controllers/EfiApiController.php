@@ -33,6 +33,27 @@ class EfiApiController extends Controller
         return response()->json($gateway->gerarPagamento($request->validated()));
     }
 
+    public function getTixId(string $txid)
+    {
+        if(empty($txid)){
+            return response()->json([
+                "message" => "Atenção, é necessário informar o txid para consulta!"
+            ], 400);
+        }
+
+        $gateway = EfiPaymentGatewayFactory::make(EfiPaymentMethodEnum::PIX);
+
+        $dataTix = $gateway->getTixId($txid);
+
+        if(count($dataTix) === 0){
+            return response()->json([
+                "message" => "Nenhuma cobrança encontrada para o txid informado"
+            ], 404);
+        }
+
+        return response()->json($dataTix);
+    }
+
     /**
      * Display a listing of the resource.
      */
