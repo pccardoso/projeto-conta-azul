@@ -6,7 +6,7 @@
     use Illuminate\Support\Facades\Http;
     use Illuminate\Support\Facades\Log;
 
-    class PipefyService {
+    class PipefyService{
 
         public function getAccessToken(): ?string {
 
