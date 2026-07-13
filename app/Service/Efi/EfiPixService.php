@@ -105,7 +105,7 @@ class EfiPixService implements EfiPaymentGatewayInterface
                     
                         $dataPayment = $this->getTixId($txid);
 
-                        if(count($dataPayment)) $responseTxid[] = $dataPayment;
+                        if(count($dataPayment)) $responseTxid[] = [...$pix, "data_payment" => $dataPayment];
 
                     }
                 }
