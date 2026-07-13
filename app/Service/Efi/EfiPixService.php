@@ -6,14 +6,9 @@ use App\Contracts\EfiPaymentGatewayInterface;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use App\Models\PeripheralFinancialReleases;
-use App\Service\PipefyService;
 
 class EfiPixService implements EfiPaymentGatewayInterface
 {
-
-    public function __construct(
-        protected PipefyService $pipefyService
-    ){}
 
     public function authenticate(): array
     {
@@ -110,21 +105,7 @@ class EfiPixService implements EfiPaymentGatewayInterface
                     
                         $dataPayment = $this->getTixId($txid);
 
-                        Log::info('Dados do Pix recebido no webhook: '.json_encode($dataPayment));
-
-                        if(data_get($dataPayment, 'status', null) === 'CONCLUIDA'){
-                        
-                            $responsePipefy = $this->pipefyService->moveCard([
-                                "cardId" => $peripheralFinancialRelease->id_card_pipefy,
-                                "phaseId" => 343120341
-                            ]);
-
-                            $responseTxid[] = [
-                                "txid" => $txid,
-                                "response" => $responsePipefy
-                            ];
-
-                        }
+                        if(count($dataPayment)) $responseTxid[] = $dataPayment;
 
                     }
                 }
