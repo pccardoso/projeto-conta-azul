@@ -36,10 +36,49 @@
             $dataReturn = [];
 
             foreach($data as $item){
-            
+
                 $getPheripheralCurrent = PeripheralFinancialReleases::where('txid_efi', $item['txid'])->first();
 
                 if($getPheripheralCurrent){
+
+                    $pagador = $item['gnExtras']['pagador'] ?? [];
+                    $cpfCnpjPagador = $pagador['cnpj'] ?? $pagador['cpf'] ?? null;
+
+                    $responsePipefyUpdateCard = $this->pipefyService->updateCard([
+                        "cardId" => $getPheripheralCurrent->id_card_pipefy,
+                        "fields" => [
+                            [
+                                "field_id" => "data_hora_de_pagamento",
+                                "field_value" => isset($item['horario'])
+                                    ? \Carbon\Carbon::parse($item['horario'])->timezone(config('app.timezone'))->format('d/m/Y H:i')
+                                    : null
+                            ],
+                            [
+                                "field_id" => "informa_es_do_pagador",
+                                "field_value" => $item['infoPagador'] ?? null
+                            ],
+                            [
+                                "field_id" => "identificador_de_transa_o",
+                                "field_value" => $item['endToEndId'] ?? null
+                            ],
+                            [
+                                "field_id" => "identificador_de_pagamento_txid",
+                                "field_value" => $item['txid']
+                            ],
+                            [
+                                "field_id" => "c_digo_banco",
+                                "field_value" => $pagador['codigoBanco'] ?? null
+                            ],
+                            [
+                                "field_id" => "cpf_cnpj_pagador",
+                                "field_value" => $cpfCnpjPagador
+                            ],
+                            [
+                                "field_id" => "nome_pagador",
+                                "field_value" => $pagador['nome'] ?? null
+                            ]
+                        ]
+                    ]);
 
                     $responsePipefy = $this->pipefyService->moveCard([
                         "cardId" => $getPheripheralCurrent->id_card_pipefy,
@@ -48,7 +87,8 @@
 
                     $dataReturn[] = [
                         "txid" => $item['txid'],
-                        "response" => $responsePipefy
+                        "responseMoveCard" => $responsePipefy,
+                        "responseUpdateCard" => $responsePipefyUpdateCard
                     ];
 
                 }
