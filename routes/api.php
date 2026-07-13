@@ -37,6 +37,7 @@ Route::middleware(['auth:sanctum', 'throttle:sanctum'])->group(function () {
         Route::post('authenticate/{typeMethod}', [EfiApiController::class, 'authenticate']);
         Route::post('create-link-credit-card', [EfiApiController::class, 'createLinkCreditCard']);
         Route::post('create-pix', [EfiApiController::class, 'createPix']);
+        Route::get('get-tix-id/{txid}', [EfiApiController::class, 'getTixId']);
     });
 
     Route::get('teste', function () {
