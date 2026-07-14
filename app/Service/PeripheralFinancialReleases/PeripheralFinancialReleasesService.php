@@ -50,7 +50,7 @@
                             [
                                 "field_id" => "data_hora_de_pagamento",
                                 "field_value" => isset($item['horario'])
-                                    ? \Carbon\Carbon::parse($item['horario'])->timezone(config('app.timezone'))->format('d/m/Y H:i')
+                                    ? \Carbon\Carbon::parse($item['horario'])->format('d/m/Y H:i')
                                     : null
                             ],
                             [
