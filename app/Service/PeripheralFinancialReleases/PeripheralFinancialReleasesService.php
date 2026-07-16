@@ -76,6 +76,10 @@
                             [
                                 "field_id" => "nome_pagador",
                                 "field_value" => $pagador['nome'] ?? null
+                            ],
+                            [
+                                "field_id" => "situa_o_do_pagamento",
+                                "field_value" => "Pago"
                             ]
                         ]
                     ]);
