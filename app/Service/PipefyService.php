@@ -8,6 +8,8 @@
 
     class PipefyService{
 
+        private const PIPE_ID_PERIFERICO = 306857755;
+
         public function getAccessToken(): ?string {
 
             $cachedToken = Cache::get('pipefy_access_token');
@@ -151,6 +153,55 @@
 
             if($responseUpdateLabel->status() === 200 && empty($responseUpdateLabel->json('errors'))){
                 return $responseUpdateLabel->json('data.updateCard.card');
+            }
+
+            return false;
+
+        }
+
+
+        public function createCard(array $data) {
+
+            Log::info('Dados para criação do card: '.json_encode($data));
+
+            $query = <<<'GRAPHQL'
+                mutation CreateCard($input: CreateCardInput!) {
+                    createCard(input: $input) {
+                        card {
+                            id
+                            title
+                        }
+                    }
+                }
+                GRAPHQL;
+
+            $fieldsAttributes = array_map(fn($field) => [
+                'field_id' => $field['field_id'],
+                'field_value' => $field['field_value'],
+            ], $data['fields'] ?? []);
+
+            $input = [
+                'pipe_id' => (string) ($data['pipeId'] ?? self::PIPE_ID_PERIFERICO),
+                'title' => $data['title'],
+                'fields_attributes' => $fieldsAttributes,
+            ];
+
+            if (!empty($data['parentIds'])) {
+                $input['parent_ids'] = array_map('strval', $data['parentIds']);
+            }
+
+            $responseCreate = Http::withToken(config('services.pipefy.personal_access_token'))
+                ->post('https://api.pipefy.com/graphql', [
+                    'query' => $query,
+                    'variables' => [
+                        'input' => $input,
+                    ],
+                ]);
+
+            Log::info('Resposta da API de criação do card: '.json_encode($responseCreate->body()));
+
+            if($responseCreate->status() === 200 && empty($responseCreate->json('errors'))){
+                return $responseCreate->json('data.createCard.card');
             }
 
             return false;

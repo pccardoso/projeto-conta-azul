@@ -59,6 +59,7 @@ return [
         'client_id' => env('PIPEFY_CLIENT_ID'),
         'client_secret' => env('PIPEFY_CLIENT_SECRET'),
         'token_url' => env('PIPEFY_TOKEN_URL'),
+        'personal_access_token' => env('PIPEFY_PERSONAL_ACCESS_TOKEN'),
     ]
 
 ];
