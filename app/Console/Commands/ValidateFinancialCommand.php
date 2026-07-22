@@ -11,6 +11,7 @@ use App\Service\FinancialReleasesService;
 use App\Enum\StatusFinancialEnum;
 use Illuminate\Support\Facades\Log;
 use App\Service\PipefyService;
+use Carbon\Carbon;
 
 
 #[Signature('app:validate-financial-command')]
@@ -44,8 +45,63 @@ class ValidateFinancialCommand extends Command
                 $paidAmount = data_get($dataEventFinancial, '0.valor_pago', null);
                 $datePayment = data_get($dataEventFinancial, '0.baixas.0.data_pagamento', null);
 
+                $dueDateExpense = data_get($dataEventFinancial, '0.data_vencimento');
+                $originalDueDate = $financial->due_date;
+
+                //Validar se o pagamento foi prorrogado
+                if (
+                    $dueDateExpense &&
+                    $originalDueDate &&
+                    $dueDateExpense !== $originalDueDate &&
+                    Carbon::parse($dueDateExpense)->greaterThan(Carbon::parse($originalDueDate))
+                ) {
+
+                    Log::info('Pagamento foi prorrogado: '.json_encode($financial));
+
+                    //Aplicar etiqueta
+                    $pipefyService->updateLabel([
+                        "cardId" => $financial->id_card_pipefy,
+                        "labelIds" => [317912524]
+                    ]);
+
+                    //Atualizar o due date no card do pipefy
+                    $pipefyService->updateCard([
+                        "cardId" => $financial->id_card_pipefy,
+                        "fields" => [
+                            [
+                                "field_id" => "prazo_para_pagamento",
+                                "field_value" => Carbon::parse($dueDateExpense, 'America/Fortaleza')
+                                                    ->setTime(23, 59, 59)
+                                                    ->toIso8601String()
+                            ]
+                        ]
+                    ]);
+
+                    $financial->update([
+                        'due_date' => $dueDateExpense,
+                        'due_date_expected' => $dueDateExpense
+                    ]);
+
+
+
+                }
+
 
                 if($statusEvent === StatusFinancialEnum::QUITADO->value){
+
+                    //Validando condicional de antecipado
+
+                    if ($datePayment && $dueDateExpense
+                        && Carbon::parse($datePayment)->lessThan(Carbon::parse($dueDateExpense))) {
+
+                        Log::info('Pagamento foi antecipado: '.json_encode($financial));
+                        
+                        $pipefyService->updateLabel([
+                            "cardId" => $financial->id_card_pipefy,
+                            "labelIds" => [317912526]
+                        ]);
+
+                    }
 
                     $financial->update([
                         'status' => StatusFinancialEnum::QUITADO,
