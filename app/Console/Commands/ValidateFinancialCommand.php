@@ -53,7 +53,8 @@ class ValidateFinancialCommand extends Command
                     $dueDateExpense &&
                     $originalDueDate &&
                     $dueDateExpense !== $originalDueDate &&
-                    Carbon::parse($dueDateExpense)->greaterThan(Carbon::parse($originalDueDate))
+                    Carbon::parse($dueDateExpense)->greaterThan(Carbon::parse($originalDueDate)) &&
+                    $statusEvent === StatusFinancialEnum::PENDENTE->value
                 ) {
 
                     Log::info('Pagamento foi prorrogado: '.json_encode($financial));
